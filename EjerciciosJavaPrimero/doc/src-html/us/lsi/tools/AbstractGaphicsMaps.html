@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package us.lsi.tools;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.HashMap;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.util.List;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.util.Map;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import java.util.stream.Collectors;</a>
+<span class="sourceLineNo">007</span><a id="line.7"></a>
+<span class="sourceLineNo">008</span><a id="line.8">import us.lsi.data.Coordenadas2D;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">public abstract class AbstractGaphicsMaps implements GraphicsMaps{</a>
+<span class="sourceLineNo">011</span><a id="line.11">        </a>
+<span class="sourceLineNo">012</span><a id="line.12">        public abstract String toPoint(Coordenadas2D coordenadas);</a>
+<span class="sourceLineNo">013</span><a id="line.13">        public abstract String toMarker(String color, String text, Coordenadas2D coordenadas);</a>
+<span class="sourceLineNo">014</span><a id="line.14">        protected abstract String getKey();</a>
+<span class="sourceLineNo">015</span><a id="line.15">        protected abstract String getPolylinePattern();</a>
+<span class="sourceLineNo">016</span><a id="line.16">        protected abstract String getMarkersPattern();</a>
+<span class="sourceLineNo">017</span><a id="line.17">        </a>
+<span class="sourceLineNo">018</span><a id="line.18">        @Override</a>
+<span class="sourceLineNo">019</span><a id="line.19">        public void polyline(String fileOut, List&lt;Coordenadas2D&gt; ubicaciones) {</a>
+<span class="sourceLineNo">020</span><a id="line.20">                Coordenadas2D center = Coordenadas2D.center(ubicaciones);</a>
+<span class="sourceLineNo">021</span><a id="line.21">                String result = getPolylinePattern();</a>
+<span class="sourceLineNo">022</span><a id="line.22">                String polylineText = ubicaciones.stream().map(x-&gt;toPoint(x)).collect(Collectors.joining(",","\n[", "]\n"));</a>
+<span class="sourceLineNo">023</span><a id="line.23">                String centerText = toPoint(center);</a>
+<span class="sourceLineNo">024</span><a id="line.24">                String markerCenterText = toMarker("red","C",center);</a>
+<span class="sourceLineNo">025</span><a id="line.25">                String markerBeginText = toMarker("red","S",ubicaciones.get(0));</a>
+<span class="sourceLineNo">026</span><a id="line.26">                String markerEndText = toMarker("red","E",ubicaciones.get(ubicaciones.size()-1));</a>
+<span class="sourceLineNo">027</span><a id="line.27">                String keyText = getKey();</a>
+<span class="sourceLineNo">028</span><a id="line.28">                Map&lt;String,String&gt; reglas = new HashMap&lt;&gt;();</a>
+<span class="sourceLineNo">029</span><a id="line.29">                reglas.put("center",centerText);</a>
+<span class="sourceLineNo">030</span><a id="line.30">                reglas.put("markerbegin",markerBeginText);</a>
+<span class="sourceLineNo">031</span><a id="line.31">                reglas.put("markerend",markerEndText);</a>
+<span class="sourceLineNo">032</span><a id="line.32">                reglas.put("markercenter",markerCenterText);</a>
+<span class="sourceLineNo">033</span><a id="line.33">                reglas.put("polyline",polylineText);</a>
+<span class="sourceLineNo">034</span><a id="line.34">                reglas.put("key",keyText);</a>
+<span class="sourceLineNo">035</span><a id="line.35">                result = StringTools.transform(result,reglas);</a>
+<span class="sourceLineNo">036</span><a id="line.36">                FileTools.write(fileOut,result);</a>
+<span class="sourceLineNo">037</span><a id="line.37">        }</a>
+<span class="sourceLineNo">038</span><a id="line.38"></a>
+<span class="sourceLineNo">039</span><a id="line.39">        @Override</a>
+<span class="sourceLineNo">040</span><a id="line.40">        public void markers(String fileOut, String markerColor, List&lt;Coordenadas2D&gt; ubicaciones) {</a>
+<span class="sourceLineNo">041</span><a id="line.41">                Coordenadas2D center = Coordenadas2D.center(ubicaciones);</a>
+<span class="sourceLineNo">042</span><a id="line.42">                String result = getMarkersPattern();</a>
+<span class="sourceLineNo">043</span><a id="line.43">                String markersText = ubicaciones.stream().map(x-&gt;toMarker(markerColor,"E",x)).collect(Collectors.joining("\n","\n", "\n"));</a>
+<span class="sourceLineNo">044</span><a id="line.44">                String centerMarkerText = toMarker("red","C",center);</a>
+<span class="sourceLineNo">045</span><a id="line.45">                String centerText = toPoint(center);</a>
+<span class="sourceLineNo">046</span><a id="line.46">                String keyText = getKey();</a>
+<span class="sourceLineNo">047</span><a id="line.47">                Map&lt;String,String&gt; reglas = new HashMap&lt;&gt;();</a>
+<span class="sourceLineNo">048</span><a id="line.48">                reglas.put("center",centerText);</a>
+<span class="sourceLineNo">049</span><a id="line.49">                reglas.put("markercenter",centerMarkerText);</a>
+<span class="sourceLineNo">050</span><a id="line.50">                reglas.put("markers",markersText);</a>
+<span class="sourceLineNo">051</span><a id="line.51">                reglas.put("key",keyText);</a>
+<span class="sourceLineNo">052</span><a id="line.52">                result = StringTools.transform(result,reglas);</a>
+<span class="sourceLineNo">053</span><a id="line.53">                FileTools.write(fileOut,result);</a>
+<span class="sourceLineNo">054</span><a id="line.54">        }</a>
+<span class="sourceLineNo">055</span><a id="line.55"></a>
+<span class="sourceLineNo">056</span><a id="line.56">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package us.lsi.data;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.List;</a>
+<span class="sourceLineNo">004</span><a id="line.4"></a>
+<span class="sourceLineNo">005</span><a id="line.5"></a>
+<span class="sourceLineNo">006</span><a id="line.6">public class Coordenadas2D {</a>
+<span class="sourceLineNo">007</span><a id="line.7">        </a>
+<span class="sourceLineNo">008</span><a id="line.8">        public static Coordenadas2D of(Double latitude, Double longitude) {</a>
+<span class="sourceLineNo">009</span><a id="line.9">                return new Coordenadas2D(latitude, longitude);</a>
+<span class="sourceLineNo">010</span><a id="line.10">        }</a>
+<span class="sourceLineNo">011</span><a id="line.11"></a>
+<span class="sourceLineNo">012</span><a id="line.12">        private Double latitude;</a>
+<span class="sourceLineNo">013</span><a id="line.13">        private Double longitude;</a>
+<span class="sourceLineNo">014</span><a id="line.14">        </a>
+<span class="sourceLineNo">015</span><a id="line.15">        private Coordenadas2D(Double latitude, Double longitude) {</a>
+<span class="sourceLineNo">016</span><a id="line.16">                super();</a>
+<span class="sourceLineNo">017</span><a id="line.17">                this.latitude = latitude;</a>
+<span class="sourceLineNo">018</span><a id="line.18">                this.longitude = longitude;</a>
+<span class="sourceLineNo">019</span><a id="line.19">        }</a>
+<span class="sourceLineNo">020</span><a id="line.20"></a>
+<span class="sourceLineNo">021</span><a id="line.21">        public Double getLatitude() {</a>
+<span class="sourceLineNo">022</span><a id="line.22">                return latitude;</a>
+<span class="sourceLineNo">023</span><a id="line.23">        }</a>
+<span class="sourceLineNo">024</span><a id="line.24"></a>
+<span class="sourceLineNo">025</span><a id="line.25">        public Double getLongitude() {</a>
+<span class="sourceLineNo">026</span><a id="line.26">                return longitude;</a>
+<span class="sourceLineNo">027</span><a id="line.27">        }</a>
+<span class="sourceLineNo">028</span><a id="line.28">        </a>
+<span class="sourceLineNo">029</span><a id="line.29">        public Coordenadas2D toRadians() {</a>
+<span class="sourceLineNo">030</span><a id="line.30">                Double latitude = Math.toRadians(this.latitude);</a>
+<span class="sourceLineNo">031</span><a id="line.31">                Double longitude = Math.toRadians(this.longitude);</a>
+<span class="sourceLineNo">032</span><a id="line.32">                return Coordenadas2D.of(latitude, longitude);</a>
+<span class="sourceLineNo">033</span><a id="line.33">        }</a>
+<span class="sourceLineNo">034</span><a id="line.34"></a>
+<span class="sourceLineNo">035</span><a id="line.35">        public Double distance(Coordenadas2D c) {</a>
+<span class="sourceLineNo">036</span><a id="line.36">                return distance(this,c);</a>
+<span class="sourceLineNo">037</span><a id="line.37">        }</a>
+<span class="sourceLineNo">038</span><a id="line.38">        </a>
+<span class="sourceLineNo">039</span><a id="line.39">        public Boolean esCercana(Coordenadas2D c, Double d) {</a>
+<span class="sourceLineNo">040</span><a id="line.40">                return distance(this,c) &lt;=d;</a>
+<span class="sourceLineNo">041</span><a id="line.41">        }</a>
+<span class="sourceLineNo">042</span><a id="line.42">        </a>
+<span class="sourceLineNo">043</span><a id="line.43">        public static Double distance(Coordenadas2D c1, Coordenadas2D c2) {</a>
+<span class="sourceLineNo">044</span><a id="line.44">                Double radio_tierra = 6373.0;</a>
+<span class="sourceLineNo">045</span><a id="line.45">                Coordenadas2D c1R = c1.toRadians();</a>
+<span class="sourceLineNo">046</span><a id="line.46">                Coordenadas2D c2R = c2.toRadians();             </a>
+<span class="sourceLineNo">047</span><a id="line.47">                Double incLat  = c2R.latitude-c1R.latitude;</a>
+<span class="sourceLineNo">048</span><a id="line.48">                Double incLong = c2R.longitude-c1R.longitude;</a>
+<span class="sourceLineNo">049</span><a id="line.49">                Double a = Math.pow(Math.sin(incLat/2),2)+</a>
+<span class="sourceLineNo">050</span><a id="line.50">                                Math.cos(c1R.latitude)*Math.cos(c2R.latitude)*Math.pow(Math.sin(incLong/2),2);</a>
+<span class="sourceLineNo">051</span><a id="line.51">                Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));</a>
+<span class="sourceLineNo">052</span><a id="line.52">                return radio_tierra*c;</a>
+<span class="sourceLineNo">053</span><a id="line.53">        }</a>
+<span class="sourceLineNo">054</span><a id="line.54">        public static Coordenadas2D center(List&lt;Coordenadas2D&gt; coordenadas) {</a>
+<span class="sourceLineNo">055</span><a id="line.55">                Double averageLat = coordenadas.stream().mapToDouble(x-&gt;x.latitude).average().getAsDouble();</a>
+<span class="sourceLineNo">056</span><a id="line.56">                Double averageLng = coordenadas.stream().mapToDouble(x-&gt;x.longitude).average().getAsDouble();</a>
+<span class="sourceLineNo">057</span><a id="line.57">                return Coordenadas2D.of(averageLat,averageLng);</a>
+<span class="sourceLineNo">058</span><a id="line.58">        }</a>
+<span class="sourceLineNo">059</span><a id="line.59">        </a>
+<span class="sourceLineNo">060</span><a id="line.60">        @Override</a>
+<span class="sourceLineNo">061</span><a id="line.61">        public String toString() {</a>
+<span class="sourceLineNo">062</span><a id="line.62">                return String.format("(%f,%f)",latitude,longitude);</a>
+<span class="sourceLineNo">063</span><a id="line.63">        }</a>
+<span class="sourceLineNo">064</span><a id="line.64">        </a>
+<span class="sourceLineNo">065</span><a id="line.65">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

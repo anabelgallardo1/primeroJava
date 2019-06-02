@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple Polylines</title>
+    <style>
+      
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 14,
+          center: {lat: 51.498707, lng: -0.119742},
+          mapTypeId: 'terrain'
+        });
+        
+        marker8 = new google.maps.Marker({
+    map: map,
+    position: {lat: 51.498707, lng: -0.119742},
+    title: 'C' ,
+    icon: {
+ url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
+  });
+	
+marker6 = new google.maps.Marker({
+    map: map,
+    position: {lat: 51.4862, lng: -0.11966},
+    title: 'E' ,
+    icon: {
+ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
+  });
+marker7 = new google.maps.Marker({
+    map: map,
+    position: {lat: 51.511214, lng: -0.119824},
+    title: 'E' ,
+    icon: {
+ url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png"}
+  });
+
+       
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0KQznnZhC94VyQZEFnU8FJWAVZQAlhnA&callback=initMap">
+    </script>
+  </body>
+</html>

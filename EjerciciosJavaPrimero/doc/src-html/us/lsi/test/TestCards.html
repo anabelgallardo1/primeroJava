@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">package us.lsi.test;</a>
+<span class="sourceLineNo">002</span><a id="line.2"></a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.Arrays;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.util.Comparator;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.util.List;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import java.util.Map;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.util.stream.Collectors;</a>
+<span class="sourceLineNo">008</span><a id="line.8">import java.util.stream.IntStream;</a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">import us.lsi.montecarlo.Mano;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import us.lsi.montecarlo.Mano.Jugada;</a>
+<span class="sourceLineNo">012</span><a id="line.12">import us.lsi.tools.Graphics;</a>
+<span class="sourceLineNo">013</span><a id="line.13">import us.lsi.tools.GraphicsCards;</a>
+<span class="sourceLineNo">014</span><a id="line.14"></a>
+<span class="sourceLineNo">015</span><a id="line.15">public class TestCards {</a>
+<span class="sourceLineNo">016</span><a id="line.16">        </a>
+<span class="sourceLineNo">017</span><a id="line.17">        public static Map&lt;Jugada, Long&gt; random(Integer n){</a>
+<span class="sourceLineNo">018</span><a id="line.18">                Map&lt;Jugada,Long&gt; m = IntStream.range(0,n)</a>
+<span class="sourceLineNo">019</span><a id="line.19">                                   .boxed()</a>
+<span class="sourceLineNo">020</span><a id="line.20">                                   .map(x-&gt;Mano.random())</a>
+<span class="sourceLineNo">021</span><a id="line.21">                                   .collect(Collectors.groupingBy(x-&gt;x.getJugada(),Collectors.counting()));</a>
+<span class="sourceLineNo">022</span><a id="line.22">                return m;</a>
+<span class="sourceLineNo">023</span><a id="line.23">        }</a>
+<span class="sourceLineNo">024</span><a id="line.24"></a>
+<span class="sourceLineNo">025</span><a id="line.25">        public static void main(String[] args) {</a>
+<span class="sourceLineNo">026</span><a id="line.26">                Mano m = Mano.random();</a>
+<span class="sourceLineNo">027</span><a id="line.27">                Double fuerza = Mano.fuerza(m, 5000);</a>
+<span class="sourceLineNo">028</span><a id="line.28">                GraphicsCards.cartas("ficheros/CartasOut.html",m.getCartas(),fuerza,m.getJugada().toString());</a>
+<span class="sourceLineNo">029</span><a id="line.29">                Map&lt;Jugada,Long&gt; tj = TestCards.random(5000);</a>
+<span class="sourceLineNo">030</span><a id="line.30">                System.out.println(tj.entrySet().stream()</a>
+<span class="sourceLineNo">031</span><a id="line.31">                                .sorted(Comparator.comparing(x-&gt;x.getValue()))</a>
+<span class="sourceLineNo">032</span><a id="line.32">                                .map(x-&gt;String.format("(%s,%d)",x.getKey(),x.getValue()))</a>
+<span class="sourceLineNo">033</span><a id="line.33">                                .collect(Collectors.joining("\n")));</a>
+<span class="sourceLineNo">034</span><a id="line.34">                List&lt;String&gt; campos = Arrays.asList("Tipo de Jugada","Numero");</a>
+<span class="sourceLineNo">035</span><a id="line.35">                List&lt;String&gt; nombres = tj.keySet().stream().map(x-&gt;x.toString()).collect(Collectors.toList());</a>
+<span class="sourceLineNo">036</span><a id="line.36">                List&lt;Long&gt; datos = tj.keySet().stream().map(x-&gt;tj.get(x)).collect(Collectors.toList());</a>
+<span class="sourceLineNo">037</span><a id="line.37">                Graphics.pieChart("ficheros/PieChartOut.html","Tipos de jugadas",campos, nombres, datos);</a>
+<span class="sourceLineNo">038</span><a id="line.38">        }</a>
+<span class="sourceLineNo">039</span><a id="line.39"></a>
+<span class="sourceLineNo">040</span><a id="line.40">        </a>
+<span class="sourceLineNo">041</span><a id="line.41"></a>
+<span class="sourceLineNo">042</span><a id="line.42">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>
