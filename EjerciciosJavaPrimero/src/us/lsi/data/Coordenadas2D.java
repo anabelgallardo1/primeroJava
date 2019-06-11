@@ -9,6 +9,7 @@ public class Coordenadas2D {
 		return new Coordenadas2D(latitude, longitude);
 	}
 
+	
 	private Double latitude;
 	private Double longitude;
 	
