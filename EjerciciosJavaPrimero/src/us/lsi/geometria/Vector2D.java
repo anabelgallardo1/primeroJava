@@ -16,8 +16,8 @@ public class Vector2D {
 		return new Vector2D(x, y);
 	}
 
-	public static Vector2D of(Punto2D p) {
-		return new Vector2D(p.getX(), p.getY());
+	public static Vector2D of(Punto2D p2, Punto2D p1) {
+		return p2.minus(p1);
 	}
 	
 	public static Vector2D copy(Vector2D p) {

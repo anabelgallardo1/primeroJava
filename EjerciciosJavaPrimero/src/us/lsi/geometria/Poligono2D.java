@@ -3,6 +3,8 @@ package us.lsi.geometria;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import us.lsi.tools.Preconditions;
 
@@ -18,6 +20,10 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	}
 
 	public static Poligono2D ofPuntos(Punto2D... lp) {
+		return new Poligono2D(lp);
+	}
+	
+	public static Poligono2D ofPuntos(List<Punto2D> lp) {
 		return new Poligono2D(lp);
 	}
 
@@ -51,6 +57,10 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		vertices.add(p3);
 	}
 	
+	private Poligono2D(List<Punto2D> lp) {
+		Preconditions.checkArgument(lp.size()>=3);
+		this.vertices = new ArrayList<>(lp);
+	}
 	
 	private Poligono2D(Punto2D... lp) {
 		vertices = new ArrayList<>();
@@ -72,34 +82,31 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		return Collections.unmodifiableList(vertices);
 	}
 	
+	public Vector2D getLado(Integer i) {
+		return Vector2D.of(this.vertices.get(i+1),this.vertices.get(i));
+	}
+	
 	public Double getArea(){
-		Double area = 0.;
-		List<Vector2D> vectores = new ArrayList<>();
-		for(int i = 1;  i < vertices.size(); i++){
-			vectores.add(vertices.get(i).minus(vertices.get(0)));
-		}
-		for(int i = 1;  i < vectores.size(); i++){			
-			area = area + vectores.get(i-1).multiplicaVectorial(vectores.get(i));
-		}
+		Integer n = this.getNumeroDeVertices();
+		Double area = IntStream.range(0,n-1)
+				.mapToDouble(i->
+						this.getLado(i).multiplicaVectorial(this.getLado(i-1)))
+				.sum();
 		return area/2;
 	}
-
 	
 	public Poligono2D rota(Punto2D p, Double angulo) {
-		List<Punto2D> nVertices = new ArrayList<>();
-		for(Punto2D v: this.vertices){
-			nVertices.add(v.rota(p, angulo));
-		}
-		return Poligono2D.ofPuntos(nVertices.toArray(new Punto2D[vertices.size()]));
+		return Poligono2D.ofPuntos(
+				this.vertices.stream()
+				.map(x->x.rota(p,angulo))
+				.collect(Collectors.toList()));
 	}
 
-	
 	public Poligono2D traslada(Vector2D v) {
-		List<Punto2D> nVertices = new ArrayList<>();
-		for(Punto2D vt: this.vertices){
-			nVertices.add(vt.traslada(v));
-		}
-		return Poligono2D.ofPuntos(nVertices.toArray(new Punto2D[vertices.size()]));
+		return Poligono2D.ofPuntos(
+				this.vertices.stream()
+				.map(p->p.traslada(v))
+				.collect(Collectors.toList()));
 	}
 	
 	
@@ -133,8 +140,5 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public String toString() {
 		return "Poligono [vertices=" + vertices + "]";
 	}
-
-	
-	
 	
 }
