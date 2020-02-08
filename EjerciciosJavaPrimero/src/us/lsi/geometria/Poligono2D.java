@@ -161,7 +161,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		        polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY());
 		};
 		polygon.closePath();
-		g2.fill(polygon);		
+		g2.draw(polygon);		
 	}
 	
 }

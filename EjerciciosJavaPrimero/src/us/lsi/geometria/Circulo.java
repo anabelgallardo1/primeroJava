@@ -48,7 +48,7 @@ public class Circulo implements ObjetoGeometrico2D {
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(new Ellipse2D.Double(this.centro.getX(), this.centro.getY(),this.radio,this.radio));		
+		g2.draw(new Ellipse2D.Double(this.centro.getX(), this.centro.getY(),this.radio,this.radio));		
 	}
 	
 	@Override
