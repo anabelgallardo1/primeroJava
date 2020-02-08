@@ -1,5 +1,9 @@
 package us.lsi.geometria;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+
 public class Circulo implements ObjetoGeometrico2D {
 	
 	public static Circulo of(Punto2D centro, Double radio) {
@@ -14,12 +18,10 @@ public class Circulo implements ObjetoGeometrico2D {
 		this.centro = centro;
 		this.radio = radio;
 	}
-
 	
 	public Punto2D getCentro() {
 		return centro;
 	}
-
 
 	public Double getRadio() {
 		return radio;
@@ -41,6 +43,12 @@ public class Circulo implements ObjetoGeometrico2D {
 	@Override
 	public Circulo traslada(Vector2D v) {
 		return Circulo.of(this.centro.traslada(v), this.radio);
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.fill(new Ellipse2D.Double(this.centro.getX(), this.centro.getY(),this.radio,this.radio));		
 	}
 	
 	@Override
@@ -79,5 +87,6 @@ public class Circulo implements ObjetoGeometrico2D {
 	public String toString() {
 		return "(" + this.centro + ", " + this.radio + ")";
 	}
+
 
 }

@@ -1,5 +1,9 @@
 package us.lsi.geometria;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
+
 public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {	
 
 	private static Punto2D cero = Punto2D.of();
@@ -88,6 +92,12 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 		return p.add(v);
 	}
 	
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.fill(new Ellipse2D.Double(this.x, this.y,5,5));
+	}	
+	
 	public String toString() {
     	String s="("+this.getX()+","+ this.getY()+")";
     	return s;
@@ -130,6 +140,6 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	           throw new NullPointerException();
 	    }
 		return this.getDistanciaAlOrigen().compareTo(p.getDistanciaAlOrigen());
-	}	
+	}
 	
 }

@@ -1,5 +1,8 @@
 package us.lsi.geometria;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -82,15 +85,22 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		return Collections.unmodifiableList(vertices);
 	}
 	
+	public Punto2D getVertice(Integer i) {
+		Integer n = this.getNumeroDeVertices();
+		Preconditions.checkElementIndex(i, n);
+		return vertices.get(i);
+	}
+	
 	public Vector2D getLado(Integer i) {
-		return Vector2D.of(this.vertices.get(i+1),this.vertices.get(i));
+		Integer n = this.getNumeroDeVertices();
+		Preconditions.checkElementIndex(i, n);
+		return Vector2D.of(this.vertices.get(i),this.vertices.get((i+1)%n));
 	}
 	
 	public Double getArea(){
 		Integer n = this.getNumeroDeVertices();
-		Double area = IntStream.range(0,n-1)
-				.mapToDouble(i->
-						this.getLado(i).multiplicaVectorial(this.getLado(i-1)))
+		Double area = IntStream.range(0,n)
+				.mapToDouble(i->this.getLado(i).multiplicaVectorial(this.getLado(i+1)))
 				.sum();
 		return area/2;
 	}
@@ -139,6 +149,19 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	@Override
 	public String toString() {
 		return "Poligono [vertices=" + vertices + "]";
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		Integer n = this.getNumeroDeVertices();
+		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
+		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
+		for (int i = 1; i < n; i++) {
+		        polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY());
+		};
+		polygon.closePath();
+		g2.fill(polygon);		
 	}
 	
 }
