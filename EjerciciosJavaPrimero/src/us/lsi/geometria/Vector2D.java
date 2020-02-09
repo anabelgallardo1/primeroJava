@@ -116,15 +116,15 @@ public class Vector2D {
 	}
 	
 	public Vector2D rota(Double angulo) {
-		return ofRadianes(this.modulo,this.angulo+angulo);
+		return Vector2D.ofRadianes(this.modulo,this.angulo+angulo);
 	}
 	
 	public Vector2D suma(Vector2D v) {
-		return ofXY(this.x+v.getX(),this.y+v.getY());
+		return Vector2D.ofXY(this.x+v.getX(),this.y+v.getY());
 	}
 		
 	public Vector2D multiplica(Double factor) {
-		return ofXY(this.x*factor,this.y*factor);
+		return Vector2D.ofXY(this.x*factor,this.y*factor);
 	}
 	
 	public Double multiplicaVectorial(Vector2D v) {

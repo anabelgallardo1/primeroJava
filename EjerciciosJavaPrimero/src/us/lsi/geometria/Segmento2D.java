@@ -46,6 +46,11 @@ public class Segmento2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Segmento2D homotecia(Punto2D p, Double factor) {
+		return Segmento2D.of(this.p1.homotecia(p,factor), this.p2.homotecia(p,factor));
+	}
+	
+	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.draw(new Line2D.Double(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY()));		

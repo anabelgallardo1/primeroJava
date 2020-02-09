@@ -4,16 +4,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
-public class Circulo implements ObjetoGeometrico2D {
+public class Circulo2D implements ObjetoGeometrico2D {
 	
-	public static Circulo of(Punto2D centro, Double radio) {
-		return new Circulo(centro, radio);
+	public static Circulo2D of(Punto2D centro, Double radio) {
+		return new Circulo2D(centro, radio);
 	}
 
 	private Punto2D centro;
 	private Double radio;
 	
-	private Circulo(Punto2D centro, Double radio) {
+	private Circulo2D(Punto2D centro, Double radio) {
 		super();
 		this.centro = centro;
 		this.radio = radio;
@@ -36,13 +36,18 @@ public class Circulo implements ObjetoGeometrico2D {
 	}
 
 	@Override
-	public Circulo rota(Punto2D p, Double angulo) {		
-		return Circulo.of(this.centro.rota(p,angulo), this.radio);
+	public Circulo2D rota(Punto2D p, Double angulo) {		
+		return Circulo2D.of(this.centro.rota(p,angulo), this.radio);
 	}
 
 	@Override
-	public Circulo traslada(Vector2D v) {
-		return Circulo.of(this.centro.traslada(v), this.radio);
+	public Circulo2D traslada(Vector2D v) {
+		return Circulo2D.of(this.centro.traslada(v), this.radio);
+	}
+	
+	@Override
+	public Circulo2D homotecia(Punto2D p, Double factor) {
+		return Circulo2D.of(this.centro.homotecia(p,factor), this.radio*factor);
 	}
 	
 	@Override
@@ -68,7 +73,7 @@ public class Circulo implements ObjetoGeometrico2D {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Circulo other = (Circulo) obj;
+		Circulo2D other = (Circulo2D) obj;
 		if (centro == null) {
 			if (other.centro != null)
 				return false;

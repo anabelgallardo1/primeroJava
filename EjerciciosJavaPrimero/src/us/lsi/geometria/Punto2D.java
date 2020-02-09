@@ -82,6 +82,10 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
     public Vector2D minus(Punto2D v){
     	return Vector2D.ofXY(this.x-v.getX(),this.y-v.getY());
     }
+    
+    public Vector2D vector() {
+		return Vector2D.ofXY(this.x, this.y);
+	}	
 	
 	public Punto2D traslada(Vector2D v){
 		return add(v);
@@ -92,14 +96,15 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 		return p.add(v);
 	}
 	
-	public Vector2D vector() {
-		return Vector2D.ofXY(this.x, this.y);
+	@Override
+	public Punto2D homotecia(Punto2D p, Double factor) {
+		return p.add(Vector2D.of(p, this).multiplica(factor));
 	}
 	
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(new Ellipse2D.Double(this.x, this.y,3,3));
+		g2.fill(new Ellipse2D.Double(this.x, this.y,10.,10.));
 	}	
 	
 	public String toString() {

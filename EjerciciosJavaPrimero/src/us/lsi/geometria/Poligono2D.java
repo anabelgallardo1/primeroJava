@@ -22,6 +22,10 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		return new Poligono2D(p1, p2, p3);
 	}
 	
+	public static Poligono2D trianguloEquilatero(Punto2D p1, Vector2D lado) {
+		return new Poligono2D(p1, p1.add(lado), p1.add(lado.rota(Math.PI/3)));
+	}
+	
 	public static Poligono2D cuadrado(Punto2D v, Vector2D lado) {
 		return new Poligono2D(v, v.add(lado), v.add(lado).add(lado.ortogonal()),v.add(lado.ortogonal()));
 	}
@@ -137,6 +141,22 @@ public class Poligono2D implements ObjetoGeometrico2D {
 				.collect(Collectors.toList()));
 	}
 	
+	@Override
+	public Poligono2D homotecia(Punto2D p, Double factor) {
+		return Poligono2D.ofPuntos(this.vertices.stream().map(x->x.homotecia(p, factor)).collect(Collectors.toList()));
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		Integer n = this.getNumeroDeVertices();
+		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
+		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
+		IntStream.range(1, n).forEach(i->polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY()));
+		polygon.closePath();
+		g2.draw(polygon);		
+	}
+	
 	
 	@Override
 	public int hashCode() {
@@ -167,17 +187,6 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	@Override
 	public String toString() {
 		return this.vertices.stream().map(p->p.toString()).collect(Collectors.joining(",", "(",")"));
-	}
-
-	@Override
-	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		Integer n = this.getNumeroDeVertices();
-		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
-		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
-		IntStream.range(1, n).forEach(i->polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY()));
-		polygon.closePath();
-		g2.draw(polygon);		
 	}
 	
 }
