@@ -16,7 +16,7 @@ public class Vector2D {
 		return new Vector2D(x, y);
 	}
 
-	public static Vector2D of(Punto2D p2, Punto2D p1) {
+	public static Vector2D of(Punto2D p1, Punto2D p2) {
 		return p2.minus(p1);
 	}
 	
@@ -99,19 +99,19 @@ public class Vector2D {
 	}
 	
 	public Vector2D proyectaSobre(Vector2D v){
-		Vector2D u = v.getUnitario();
+		Vector2D u = v.unitario();
 		return u.multiplica(this.multiplicaEscalar(v));
 	}	
 	
-	public Vector2D getOrtogonal() {
-		return Vector2D.ofXY(-y, x);
+	public Vector2D ortogonal() {
+		return Vector2D.ofXY(-this.y, this.x);
 	}
 	
-	public Vector2D getUnitario() {
-		return ofRadianes(1.,this.angulo);
+	public Vector2D unitario() {
+		return Vector2D.ofRadianes(1.,this.angulo);
 	}
 	
-	public Vector2D getOpuesto() {
+	public Vector2D opuesto() {
 		return Vector2D.ofXY(-x, -y);
 	}
 	
@@ -168,7 +168,7 @@ public class Vector2D {
 
 	@Override
 	public String toString() {
-		return "(" + x + "," + y + ")";
+		return String.format("(%.2f,%.2f)",this.x, this.y);
 	}
 	
 }

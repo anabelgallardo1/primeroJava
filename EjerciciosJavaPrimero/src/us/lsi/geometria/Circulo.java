@@ -85,7 +85,7 @@ public class Circulo implements ObjetoGeometrico2D {
 
 	@Override
 	public String toString() {
-		return "(" + this.centro + ", " + this.radio + ")";
+		return String.format("(%s,%.2f)",this.centro,this.radio);
 	}
 
 

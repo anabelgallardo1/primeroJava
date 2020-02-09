@@ -92,15 +92,18 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 		return p.add(v);
 	}
 	
+	public Vector2D vector() {
+		return Vector2D.ofXY(this.x, this.y);
+	}
+	
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(new Ellipse2D.Double(this.x, this.y,5,5));
+		g2.fill(new Ellipse2D.Double(this.x, this.y,3,3));
 	}	
 	
 	public String toString() {
-    	String s="("+this.getX()+","+ this.getY()+")";
-    	return s;
+    	return String.format("(%.2f,%.2f)",this.getX(),this.getY());
     }
 
 	@Override

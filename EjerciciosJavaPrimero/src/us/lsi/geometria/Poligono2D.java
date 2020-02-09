@@ -21,6 +21,17 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public static Poligono2D triangulo(Punto2D p1, Punto2D p2, Punto2D p3) {
 		return new Poligono2D(p1, p2, p3);
 	}
+	
+	public static Poligono2D cuadrado(Punto2D v, Vector2D lado) {
+		return new Poligono2D(v, v.add(lado), v.add(lado).add(lado.ortogonal()),v.add(lado.ortogonal()));
+	}
+	
+	public static Poligono2D rectangulo(Punto2D v, Vector2D base, Double altura) {
+		return new Poligono2D(v, 
+				v.add(base), 
+				v.add(base).add(base.ortogonal().multiplica(altura)),
+				v.add(base.ortogonal().multiplica(altura)));
+	}
 
 	public static Poligono2D ofPuntos(Punto2D... lp) {
 		return new Poligono2D(lp);
@@ -97,10 +108,17 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		return Vector2D.of(this.vertices.get(i),this.vertices.get((i+1)%n));
 	}
 	
+	public Vector2D getDiagonal(Integer i, Integer j) {
+		Integer n = this.getNumeroDeVertices();
+		Preconditions.checkElementIndex(i, n);
+		Preconditions.checkElementIndex(j, n);
+		return Vector2D.of(this.vertices.get(i),this.vertices.get(j));
+	}
+	
 	public Double getArea(){
 		Integer n = this.getNumeroDeVertices();
-		Double area = IntStream.range(0,n)
-				.mapToDouble(i->this.getLado(i).multiplicaVectorial(this.getLado(i+1)))
+		Double area = IntStream.range(1,n-1)
+				.mapToDouble(i->this.getDiagonal(0,i).multiplicaVectorial(this.getLado(i)))
 				.sum();
 		return area/2;
 	}
@@ -148,7 +166,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 
 	@Override
 	public String toString() {
-		return "Poligono [vertices=" + vertices + "]";
+		return this.vertices.stream().map(p->p.toString()).collect(Collectors.joining(",", "(",")"));
 	}
 
 	@Override
@@ -157,9 +175,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		Integer n = this.getNumeroDeVertices();
 		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
 		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
-		for (int i = 1; i < n; i++) {
-		        polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY());
-		};
+		IntStream.range(1, n).forEach(i->polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY()));
 		polygon.closePath();
 		g2.draw(polygon);		
 	}

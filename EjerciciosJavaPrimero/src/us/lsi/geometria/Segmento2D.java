@@ -27,6 +27,10 @@ public class Segmento2D implements ObjetoGeometrico2D {
 		return p2;
 	}
 	
+	public Vector2D vector() {
+		return Vector2D.of(this.p1,this.p2);
+	}
+	
 	public Double getLongitud(){
 		return p1.getDistanciaA(p2);
 	}
@@ -80,7 +84,7 @@ public class Segmento2D implements ObjetoGeometrico2D {
 
 	@Override
 	public String toString() {
-		return "(" + p1 + ", " + p2 + ")";
+		return String.format("(%s,%s)",this.p1,this.p2);
 	}
 
 }
