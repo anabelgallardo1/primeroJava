@@ -89,8 +89,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public Double getArea(){
 		Integer n = this.getNumeroDeVertices();
 		Double area = IntStream.range(0,n-1)
-				.mapToDouble(i->
-						this.getLado(i).multiplicaVectorial(this.getLado(i-1)))
+				.mapToDouble(i->this.getLado(i).multiplicaVectorial(this.getLado(i+1)))
 				.sum();
 		return area/2;
 	}
