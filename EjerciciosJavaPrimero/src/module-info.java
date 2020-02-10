@@ -1,11 +1,10 @@
+
 /**
- * 
- */
-/**
- * @author Miguel Toro
+ * @author migueltoro
  *
  */
-module ejerciciosJavaPrimero {
+module java_primero {
+	exports us.lsi.geometria;
 	exports us.lsi.montecarlo;
 	exports us.lsi.pojo;
 	exports us.lsi.tools;
@@ -19,4 +18,5 @@ module ejerciciosJavaPrimero {
 	requires jackson.annotations;
 	requires jackson.core;
 	requires jackson.databind;
+	requires transitive java.desktop;	
 }

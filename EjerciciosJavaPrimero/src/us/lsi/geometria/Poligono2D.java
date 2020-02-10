@@ -1,5 +1,8 @@
 package us.lsi.geometria;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +20,21 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	
 	public static Poligono2D triangulo(Punto2D p1, Punto2D p2, Punto2D p3) {
 		return new Poligono2D(p1, p2, p3);
+	}
+	
+	public static Poligono2D trianguloEquilatero(Punto2D p1, Vector2D lado) {
+		return new Poligono2D(p1, p1.add(lado), p1.add(lado.rota(Math.PI/3)));
+	}
+	
+	public static Poligono2D cuadrado(Punto2D v, Vector2D lado) {
+		return new Poligono2D(v, v.add(lado), v.add(lado).add(lado.ortogonal()),v.add(lado.ortogonal()));
+	}
+	
+	public static Poligono2D rectangulo(Punto2D v, Vector2D base, Double altura) {
+		return new Poligono2D(v, 
+				v.add(base), 
+				v.add(base).add(base.ortogonal().multiplica(altura)),
+				v.add(base.ortogonal().multiplica(altura)));
 	}
 
 	public static Poligono2D ofPuntos(Punto2D... lp) {
@@ -61,6 +79,14 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		Preconditions.checkArgument(lp.size()>=3);
 		this.vertices = new ArrayList<>(lp);
 	}
+		
+	public Double getArea(){
+		Integer n = this.getNumeroDeVertices();
+		Double area = IntStream.range(1,n-1)
+				.mapToDouble(i->this.getDiagonal(0,i).multiplicaVectorial(this.getLado(i)))
+				.sum();
+		return area/2;
+	}
 	
 	private Poligono2D(Punto2D... lp) {
 		vertices = new ArrayList<>();
@@ -82,16 +108,23 @@ public class Poligono2D implements ObjetoGeometrico2D {
 		return Collections.unmodifiableList(vertices);
 	}
 	
-	public Vector2D getLado(Integer i) {
-		return Vector2D.of(this.vertices.get(i+1),this.vertices.get(i));
+	public Punto2D getVertice(Integer i) {
+		Integer n = this.getNumeroDeVertices();
+		Preconditions.checkElementIndex(i, n);
+		return vertices.get(i);
 	}
 	
-	public Double getArea(){
+	public Vector2D getLado(Integer i) {
 		Integer n = this.getNumeroDeVertices();
-		Double area = IntStream.range(0,n-1)
-				.mapToDouble(i->this.getLado(i).multiplicaVectorial(this.getLado(i+1)))
-				.sum();
-		return area/2;
+		Preconditions.checkElementIndex(i, n);
+		return Vector2D.of(this.vertices.get(i),this.vertices.get((i+1)%n));
+	}
+	
+	public Vector2D getDiagonal(Integer i, Integer j) {
+		Integer n = this.getNumeroDeVertices();
+		Preconditions.checkElementIndex(i, n);
+		Preconditions.checkElementIndex(j, n);
+		return Vector2D.of(this.vertices.get(i),this.vertices.get(j));
 	}
 	
 	public Poligono2D rota(Punto2D p, Double angulo) {
@@ -106,6 +139,22 @@ public class Poligono2D implements ObjetoGeometrico2D {
 				this.vertices.stream()
 				.map(p->p.traslada(v))
 				.collect(Collectors.toList()));
+	}
+	
+	@Override
+	public Poligono2D homotecia(Punto2D p, Double factor) {
+		return Poligono2D.ofPuntos(this.vertices.stream().map(x->x.homotecia(p, factor)).collect(Collectors.toList()));
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		Integer n = this.getNumeroDeVertices();
+		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
+		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
+		IntStream.range(1, n).forEach(i->polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY()));
+		polygon.closePath();
+		g2.draw(polygon);		
 	}
 	
 	
@@ -137,7 +186,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 
 	@Override
 	public String toString() {
-		return "Poligono [vertices=" + vertices + "]";
+		return this.vertices.stream().map(p->p.toString()).collect(Collectors.joining(",", "(",")"));
 	}
 	
 }

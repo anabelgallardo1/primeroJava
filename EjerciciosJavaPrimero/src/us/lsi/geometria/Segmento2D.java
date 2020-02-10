@@ -1,15 +1,19 @@
 package us.lsi.geometria;
 
-public class Segmento implements ObjetoGeometrico2D {
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 
-	public static Segmento of(Punto2D p1, Punto2D p2) {
-		return new Segmento(p1, p2);
+public class Segmento2D implements ObjetoGeometrico2D {
+
+	public static Segmento2D of(Punto2D p1, Punto2D p2) {
+		return new Segmento2D(p1, p2);
 	}
 
 	private Punto2D p1;
 	private Punto2D p2;
 	
-	private Segmento(Punto2D p1, Punto2D p2) {
+	private Segmento2D(Punto2D p1, Punto2D p2) {
 		super();
 		this.p1 = p1;
 		this.p2 = p2;
@@ -23,18 +27,33 @@ public class Segmento implements ObjetoGeometrico2D {
 		return p2;
 	}
 	
+	public Vector2D vector() {
+		return Vector2D.of(this.p1,this.p2);
+	}
+	
 	public Double getLongitud(){
 		return p1.getDistanciaA(p2);
 	}
 	
 	@Override
-	public Segmento rota(Punto2D p, Double angulo) {
-		return Segmento.of(this.p1.rota(p,angulo), this.p2.rota(p,angulo));
+	public Segmento2D rota(Punto2D p, Double angulo) {
+		return Segmento2D.of(this.p1.rota(p,angulo), this.p2.rota(p,angulo));
 	}
 
 	@Override
-	public Segmento traslada(Vector2D v) {
-		return Segmento.of(this.p1.traslada(v), this.p2.traslada(v));
+	public Segmento2D traslada(Vector2D v) {
+		return Segmento2D.of(this.p1.traslada(v), this.p2.traslada(v));
+	}
+	
+	@Override
+	public Segmento2D homotecia(Punto2D p, Double factor) {
+		return Segmento2D.of(this.p1.homotecia(p,factor), this.p2.homotecia(p,factor));
+	}
+	
+	@Override
+	public void draw(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.draw(new Line2D.Double(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY()));		
 	}
 
 	@Override
@@ -54,7 +73,7 @@ public class Segmento implements ObjetoGeometrico2D {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Segmento other = (Segmento) obj;
+		Segmento2D other = (Segmento2D) obj;
 		if (p1 == null) {
 			if (other.p1 != null)
 				return false;
@@ -70,7 +89,7 @@ public class Segmento implements ObjetoGeometrico2D {
 
 	@Override
 	public String toString() {
-		return "(" + p1 + ", " + p2 + ")";
+		return String.format("(%s,%s)",this.p1,this.p2);
 	}
 
 }
