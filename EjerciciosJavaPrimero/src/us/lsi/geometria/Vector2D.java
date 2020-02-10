@@ -53,18 +53,6 @@ public class Vector2D {
 	public Double getY() {
 		return this.y;
 	}
-
-	public void setX(Double x) {
-		this.x = x;
-		this.modulo = null;
-		this.angulo = null;
-	}
-
-	public void setY(Double y) {
-		this.y = y;
-		this.modulo = null;
-		this.angulo = null;
-	}
 	
 	public Double getModulo() {
 		if(this.modulo == null) this.modulo = Math.hypot(x, y);
