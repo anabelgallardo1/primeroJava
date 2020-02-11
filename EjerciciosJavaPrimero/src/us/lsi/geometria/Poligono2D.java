@@ -33,8 +33,8 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public static Poligono2D rectangulo(Punto2D v, Vector2D base, Double altura) {
 		return new Poligono2D(v, 
 				v.add(base), 
-				v.add(base).add(base.ortogonal().multiplica(altura)),
-				v.add(base.ortogonal().multiplica(altura)));
+				v.add(base).add(base.ortogonal().multiply(altura)),
+				v.add(base.ortogonal().multiply(altura)));
 	}
 
 	public static Poligono2D ofPuntos(Punto2D... lp) {
@@ -147,6 +147,16 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Poligono2D proyectaSobre(Recta2D r) {
+		return Poligono2D.ofPuntos(this.vertices.stream().map(x->x.proyectaSobre(r)).collect(Collectors.toList()));
+	}
+	
+	@Override
+	public Poligono2D simetrico(Recta2D r) {
+		return Poligono2D.ofPuntos(this.vertices.stream().map(x->x.simetrico(r)).collect(Collectors.toList()));
+	}
+	
+	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		Integer n = this.getNumeroDeVertices();
@@ -188,5 +198,7 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public String toString() {
 		return this.vertices.stream().map(p->p.toString()).collect(Collectors.joining(",", "(",")"));
 	}
+
+	
 	
 }

@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
+import us.lsi.tools.Preconditions;
+
 public class Circulo2D implements ObjetoGeometrico2D {
 	
 	public static Circulo2D of(Punto2D centro, Double radio) {
@@ -15,6 +17,7 @@ public class Circulo2D implements ObjetoGeometrico2D {
 	
 	private Circulo2D(Punto2D centro, Double radio) {
 		super();
+		Preconditions.checkArgument(radio>=0, "El radio debe ser mayor o igual a cero");
 		this.centro = centro;
 		this.radio = radio;
 	}
@@ -51,9 +54,24 @@ public class Circulo2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Segmento2D proyectaSobre(Recta2D r) {
+		Punto2D pc = this.centro.proyectaSobre(r);
+		Vector2D u = r.getVector().unitario();
+		return Segmento2D.of(pc.add(u.multiply(this.radio)),pc.add(u.multiply(-this.radio)));
+	}
+	
+	@Override
+	public Circulo2D simetrico(Recta2D r) {
+		return Circulo2D.of(this.centro.simetrico(r), this.radio);
+	}
+
+	
+	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.draw(new Ellipse2D.Double(this.centro.getX(), this.centro.getY(),this.radio,this.radio));		
+		Punto2D sc = this.getCentro().minus(Vector2D.baseX().multiply(this.getRadio()));
+		sc = sc.minus(Vector2D.baseY().multiply(this.getRadio()));
+		g2.draw(new Ellipse2D.Double(sc.getX(),sc.getY(),2*this.radio,2*this.radio));		
 	}
 	
 	@Override
@@ -92,6 +110,5 @@ public class Circulo2D implements ObjetoGeometrico2D {
 	public String toString() {
 		return String.format("(%s,%.2f)",this.centro,this.radio);
 	}
-
 
 }

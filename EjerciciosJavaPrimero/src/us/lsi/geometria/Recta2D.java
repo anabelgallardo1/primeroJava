@@ -1,37 +1,41 @@
 package us.lsi.geometria;
 
-public class Linea2D {
+public class Recta2D {
 	
-	public static Linea2D of(Punto2D punto, Vector2D vector) {
-		return new Linea2D(punto, vector);
+	public static Recta2D of(Punto2D punto, Vector2D vector) {
+		return new Recta2D(punto, vector);
+	}
+	
+	public static Recta2D of(Punto2D p1, Punto2D p2) {
+		return new Recta2D(p1, p2.minus(p1));
 	}
 
 	private Punto2D punto;
 	private Vector2D vector;
 	
 	
-	private Linea2D(Punto2D punto, Vector2D vector) {
+	private Recta2D(Punto2D punto, Vector2D vector) {
 		super();
 		this.punto = punto;
 		this.vector = vector;
 	}
 
-
-	public Punto2D getPunto() {
-		return punto;
-	}
-
-
 	public Vector2D getVector() {
-		return vector;
+		return this.vector;
+	}
+	
+	public Vector2D unitario() {
+		return this.vector.unitario();
 	}
 
+	public Punto2D punto(Double lambda) {
+		return this.punto.add(this.vector.multiply(lambda));
+	}
 
 	@Override
 	public String toString() {
-		return String.format("%s,%s)",this.punto,this.vector);
+		return Segmento2D.of(this.punto(-200.), this.punto(200.)).toString();
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -51,7 +55,7 @@ public class Linea2D {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Linea2D other = (Linea2D) obj;
+		Recta2D other = (Recta2D) obj;
 		if (punto == null) {
 			if (other.punto != null)
 				return false;
@@ -64,7 +68,6 @@ public class Linea2D {
 			return false;
 		return true;
 	}
-	
 	
 
 }

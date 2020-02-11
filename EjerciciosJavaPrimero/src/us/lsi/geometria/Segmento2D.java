@@ -51,6 +51,16 @@ public class Segmento2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Segmento2D proyectaSobre(Recta2D r) {
+		return Segmento2D.of(this.p1.proyectaSobre(r), this.p2.proyectaSobre(r));
+	}
+	
+	@Override
+	public Segmento2D simetrico(Recta2D r) {
+		return Segmento2D.of(this.p1.simetrico(r), this.p2.simetrico(r));
+	}
+	
+	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.draw(new Line2D.Double(this.p1.getX(), this.p1.getY(), this.p2.getX(), this.p2.getY()));		

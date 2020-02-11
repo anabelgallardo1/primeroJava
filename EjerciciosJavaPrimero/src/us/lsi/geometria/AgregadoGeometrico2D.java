@@ -3,6 +3,7 @@ package us.lsi.geometria;
 
 import java.awt.Graphics;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,6 +32,30 @@ public class AgregadoGeometrico2D implements ObjetoGeometrico2D {
 	public AgregadoGeometrico2D(Set<ObjetoGeometrico2D> objetos) {
 		super();
 		this.objetos = objetos;
+	}	
+	
+	public int size() {
+		return objetos.size();
+	}
+
+	public boolean isEmpty() {
+		return objetos.isEmpty();
+	}
+
+	public boolean contains(Object o) {
+		return objetos.contains(o);
+	}
+
+	public boolean add(ObjetoGeometrico2D e) {
+		return objetos.add(e);
+	}
+
+	public boolean remove(Object o) {
+		return objetos.remove(o);
+	}
+
+	public boolean addAll(Collection<? extends ObjetoGeometrico2D> c) {
+		return objetos.addAll(c);
 	}
 
 	@Override
@@ -47,7 +72,17 @@ public class AgregadoGeometrico2D implements ObjetoGeometrico2D {
 	public AgregadoGeometrico2D homotecia(Punto2D p, Double factor) {
 		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.homotecia(p, factor)).collect(Collectors.toSet()));
 	}
+	
+	@Override
+	public ObjetoGeometrico2D proyectaSobre(Recta2D r) {
+		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.proyectaSobre(r)).collect(Collectors.toSet()));
+	}
 
+	@Override
+	public ObjetoGeometrico2D simetrico(Recta2D r) {
+		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.simetrico(r)).collect(Collectors.toSet()));
+	}
+	
 	@Override
 	public void draw(Graphics g) {
 		objetos.stream().forEach(x->x.draw(g));

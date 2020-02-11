@@ -25,11 +25,12 @@ public class Vector2D {
 	}
 	
 	public static Vector2D ofGrados(Double modulo, Double angulo){
+		Preconditions.checkArgument(modulo > 0, String.format("El módulo debe ser mayor o igual a cero y es %.2f",modulo));
 		return ofRadianes(modulo, Math.toRadians(angulo));
 	}
 	
 	public static Vector2D ofRadianes(Double modulo, Double angulo){
-		Preconditions.checkArgument(modulo >=0);
+		Preconditions.checkArgument(modulo >= 0, String.format("El módulo debe ser mayor o igual a cero y es %.2f",modulo));
 		return ofXY(modulo*Math.cos(angulo),modulo*Math.sin(angulo));		
 	}
 	
@@ -55,25 +56,13 @@ public class Vector2D {
 	}
 	
 	public Double getModulo() {
-		if(this.modulo == null) this.modulo = Math.hypot(x, y);
+		if(this.modulo == null) this.modulo = Math.abs(Math.hypot(x, y));
 		return this.modulo;
 	}
 
 	public Double getAngulo() {   //en radianes
 		if(this.angulo == null) this.angulo = Math.atan2(y, x);
 		return this.angulo;
-	}
-
-	public void setAngulo(Double angulo) {
-		this.angulo = angulo;
-		this.x = this.getModulo()*Math.cos(angulo);
-		this.y = this.getModulo()*Math.sin(angulo);
-	}
-	
-	public void setModulo(Double modulo) {
-		this.modulo = modulo;
-		this.x = modulo*Math.cos(angulo);
-		this.y = modulo*Math.sin(angulo);
 	}
 
 	public Double getAnguloEnGrados() {
@@ -90,8 +79,12 @@ public class Vector2D {
 	
 	public Vector2D proyectaSobre(Vector2D v){
 		Vector2D u = v.unitario();
-		return u.multiplica(this.multiplicaEscalar(v));
+		return u.multiply(this.multiplicaEscalar(u));
 	}	
+	
+	public Punto2D punto() {
+		return Punto2D.of(this.x, this.y);
+	}
 	
 	public Vector2D ortogonal() {
 		return Vector2D.ofXY(-this.y, this.x);
@@ -105,15 +98,19 @@ public class Vector2D {
 		return Vector2D.ofXY(-x, -y);
 	}
 	
+	public Vector2D add(Vector2D v) {
+		return Vector2D.ofXY(this.x+v.x,this.y+v.y);
+	}
+	
+	public Vector2D minus(Vector2D v) {
+		return Vector2D.ofXY(this.x-v.x,this.y-v.y);
+	}
+	
 	public Vector2D rota(Double angulo) {
 		return Vector2D.ofRadianes(this.getModulo(),this.getAngulo()+angulo);
 	}
-	
-	public Vector2D suma(Vector2D v) {
-		return Vector2D.ofXY(this.x+v.getX(),this.y+v.getY());
-	}
 		
-	public Vector2D multiplica(Double factor) {
+	public Vector2D multiply(Double factor) {
 		return Vector2D.ofXY(this.x*factor,this.y*factor);
 	}
 	

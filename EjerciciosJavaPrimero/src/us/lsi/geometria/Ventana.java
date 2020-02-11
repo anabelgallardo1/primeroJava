@@ -25,6 +25,7 @@ public class Ventana extends JPanel {
 		this.color = color;
 	}
 
+	@Override
 	public void paint(Graphics g) {
 	  Graphics2D g2 = (Graphics2D) g;
 	  g.setFont(new Font("Seqoe UI", Font.PLAIN, 16));
@@ -36,7 +37,7 @@ public class Ventana extends JPanel {
 	}
   
 	public static void draw(ObjetoGeometrico2D objeto, Color color) {
-	  JFrame f = new JFrame("Hello");
+	  JFrame f = new JFrame("Ventana de dibujo");
 	  f.getContentPane().add(new Ventana(objeto,color));
 	  f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	  f.setSize(1000, 1000);

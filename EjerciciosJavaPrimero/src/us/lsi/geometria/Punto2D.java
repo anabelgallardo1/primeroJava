@@ -78,6 +78,10 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	public Punto2D add(Vector2D v){
     	return Punto2D.of(this.x+v.getX(),this.y+v.getY());
     }
+	
+	public Punto2D minus(Vector2D v){
+    	return Punto2D.of(this.x-v.getX(),this.y-v.getY());
+    }
     
     public Vector2D minus(Punto2D v){
     	return Vector2D.ofXY(this.x-v.getX(),this.y-v.getY());
@@ -94,11 +98,22 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	public Punto2D rota(Punto2D p, Double angulo){
 		Vector2D v = minus(p).rota(angulo);
 		return p.add(v);
-	}
+	}	
 	
 	@Override
 	public Punto2D homotecia(Punto2D p, Double factor) {
-		return p.add(Vector2D.of(p, this).multiplica(factor));
+		return p.add(Vector2D.of(p, this).multiply(factor));
+	}
+	
+	@Override
+	public Punto2D proyectaSobre(Recta2D r) {
+		return r.punto(0.).add(this.minus(r.punto(0.)).proyectaSobre(r.getVector()));
+	}
+	
+	@Override
+	public Punto2D simetrico(Recta2D r) {
+		Punto2D p = this.proyectaSobre(r);
+		return p.vector().multiply(2.).minus(this.vector()).punto();
 	}
 	
 	@Override
@@ -148,6 +163,6 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	           throw new NullPointerException();
 	    }
 		return this.getDistanciaAlOrigen().compareTo(p.getDistanciaAlOrigen());
-	}
+	}	
 	
 }
