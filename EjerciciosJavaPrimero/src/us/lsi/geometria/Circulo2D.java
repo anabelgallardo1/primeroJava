@@ -64,14 +64,20 @@ public class Circulo2D implements ObjetoGeometrico2D {
 	public Circulo2D simetrico(Recta2D r) {
 		return Circulo2D.of(this.centro.simetrico(r), this.radio);
 	}
+	
+	@Override
+	public Circulo2D transform() {
+		return Circulo2D.of(this.centro.transform(), radio*Ventana.escala);
+	}
 
 	
 	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		Punto2D sc = this.getCentro().minus(Vector2D.baseX().multiply(this.getRadio()));
-		sc = sc.minus(Vector2D.baseY().multiply(this.getRadio()));
-		g2.draw(new Ellipse2D.Double(sc.getX(),sc.getY(),2*this.radio,2*this.radio));		
+		Circulo2D ct = this.transform();
+		Punto2D sc = ct.getCentro().minus(Vector2D.baseX().multiply(ct.getRadio()));
+		sc = sc.minus(Vector2D.baseY().multiply(ct.getRadio()));
+		g2.draw(new Ellipse2D.Double(sc.getX(),sc.getY(),2*ct.radio,2*ct.radio));		
 	}
 	
 	@Override
@@ -110,5 +116,7 @@ public class Circulo2D implements ObjetoGeometrico2D {
 	public String toString() {
 		return String.format("(%s,%.2f)",this.centro,this.radio);
 	}
+
+	
 
 }

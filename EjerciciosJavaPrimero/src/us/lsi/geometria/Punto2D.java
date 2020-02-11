@@ -117,9 +117,18 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Punto2D transform() {
+		Punto2D p0 = Punto2D.of(Ventana.escala*this.getX(),-Ventana.escala*this.getY());
+		return p0.add(Ventana.centro);
+	}	
+	
+	@Override
 	public void draw(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.fill(new Ellipse2D.Double(this.x, this.y,10.,10.));
+		Punto2D t = this.transform();
+		Punto2D sc = t.minus(Vector2D.baseX().multiply(5.));
+		sc = sc.minus(Vector2D.baseY().multiply(5.));
+		g2.fill(new Ellipse2D.Double(sc.x, sc.y,10.,10.));
 	}	
 	
 	public String toString() {
@@ -163,6 +172,6 @@ public class Punto2D implements Comparable<Punto2D>, ObjetoGeometrico2D {
 	           throw new NullPointerException();
 	    }
 		return this.getDistanciaAlOrigen().compareTo(p.getDistanciaAlOrigen());
-	}	
+	}
 	
 }

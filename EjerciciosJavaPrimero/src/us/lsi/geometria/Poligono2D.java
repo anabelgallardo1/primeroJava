@@ -157,12 +157,18 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
+	public Poligono2D transform() {
+		return Poligono2D.ofPuntos(this.vertices.stream().map(x->x.transform()).collect(Collectors.toList()));
+	}
+	
+	@Override
 	public void draw(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		Integer n = this.getNumeroDeVertices();
+		Graphics2D g2 = (Graphics2D) g;		
+		Poligono2D t = this.transform();
+		Integer n = t.getNumeroDeVertices();
 		GeneralPath polygon = new GeneralPath(GeneralPath.WIND_EVEN_ODD, n);
-		polygon.moveTo(this.getVertice(0).getX(),this.getVertice(0).getY());
-		IntStream.range(1, n).forEach(i->polygon.lineTo(this.getVertice(i).getX(),this.getVertice(i).getY()));
+		polygon.moveTo(t.getVertice(0).getX(),t.getVertice(0).getY());
+		IntStream.range(1, n).forEach(i->polygon.lineTo(t.getVertice(i).getX(),t.getVertice(i).getY()));
 		polygon.closePath();
 		g2.draw(polygon);		
 	}
@@ -198,6 +204,8 @@ public class Poligono2D implements ObjetoGeometrico2D {
 	public String toString() {
 		return this.vertices.stream().map(p->p.toString()).collect(Collectors.joining(",", "(",")"));
 	}
+
+	
 
 	
 	

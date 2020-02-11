@@ -74,13 +74,18 @@ public class AgregadoGeometrico2D implements ObjetoGeometrico2D {
 	}
 	
 	@Override
-	public ObjetoGeometrico2D proyectaSobre(Recta2D r) {
+	public AgregadoGeometrico2D proyectaSobre(Recta2D r) {
 		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.proyectaSobre(r)).collect(Collectors.toSet()));
 	}
 
 	@Override
-	public ObjetoGeometrico2D simetrico(Recta2D r) {
+	public AgregadoGeometrico2D simetrico(Recta2D r) {
 		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.simetrico(r)).collect(Collectors.toSet()));
+	}
+	
+	@Override
+	public AgregadoGeometrico2D transform() {
+		return AgregadoGeometrico2D.of(this.objetos.stream().map(x->x.transform()).collect(Collectors.toSet()));
 	}
 	
 	@Override
